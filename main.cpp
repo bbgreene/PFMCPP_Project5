@@ -32,7 +32,6 @@ Purpose:  This project continues developing Project3.
  
  */
 #include <iostream>
-using namespace std;
 /*
  copied UDT 1:
  */
@@ -301,6 +300,26 @@ Daw::~Daw()
     std::cout << "Envelope not responding to velocity" << std::endl;
     env.midiVelLevel = 0;
 }
+
+void Daw::applyLFO(bool lfoOn, int modDest)
+{
+    if(lfoOn && modDest > 0)
+    {
+        std::cout << "The LFO is on" << std::endl;
+    }
+}
+
+void Daw::applyEnvtoPitch(bool filterEnvSelected, bool isKeyPressed)
+{
+    if(filterEnvSelected && isKeyPressed)
+    {
+        std::cout << "The envelope is modulating the pitch" << std::endl;
+    }
+    else
+    {
+        std::cout << "The envelope is not modulating the pitch" << std::endl;
+    }
+}
 /*
  new UDT 5:
  with 2 member functions
@@ -313,8 +332,8 @@ struct WindowSill
     WindowSill();
     ~WindowSill();
 
-    void height(int plant1, int plant2);
-    void evaporateWater(int plant3);
+    void letLightIn(bool windowBlindsOpen);
+    void evaporateWater(float insideTemp, float evapTemp);
 };
 
 WindowSill::WindowSill()
@@ -332,6 +351,30 @@ WindowSill::~WindowSill()
     plant2.growthPerDay(true);
     std::cout << "Plant 3 has more leaves today, however, you must bin it!" << std::endl;
     plant3.addLeaves(4);
+}
+
+void WindowSill::letLightIn(bool windowBlindsOpen)
+{
+    if(windowBlindsOpen)
+    {
+        std::cout << "The plants will grow today!" << std::endl;
+        plant1.potentialLeafGrowthPerDay += 1;
+        std::cout << "Potential leaves grown today for Plant 1 is: " << plant1.potentialLeafGrowthPerDay << std::endl;
+    }    
+}
+
+void WindowSill::evaporateWater(float insideTemp, float evapTemp)
+{
+    if(insideTemp > evapTemp)
+    {
+        plant2.waterInRoots -= 0.2f;
+        std::cout << "Plant 2 has lost some water....it has " << plant2.waterInRoots << " litre left" << std::endl;
+    }
+    else
+    {
+        std::cout << "The temparture is good. Plant 2 currently has " << plant2.waterInRoots << " litres left" << std::endl;
+    }
+
 }
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
@@ -376,8 +419,12 @@ int main()
     std::cout << "The current modulating waveform is: " << myLFO.waveform << std::endl;
 
     Daw daw;
+    daw.applyLFO(true, 2);
+    daw.applyEnvtoPitch(false, true);
 
     WindowSill windowsill;
+    windowsill.letLightIn(true);
+    windowsill.evaporateWater(26.0f, 25.0f);
 
     std::cout << "good to go!" << std::endl;
 }
