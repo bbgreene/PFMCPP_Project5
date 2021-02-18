@@ -78,6 +78,11 @@ struct HousePlant
     HousePlant();
     ~HousePlant();
 
+    void memberFunc()
+    {
+        std::cout << "HousePlant: Amount of water in the roots is " << this->waterInRoots << " litres" << std::endl;
+    }
+
     void transportWater();
     void absorbWater(float amountOfWaterPerDay, bool wasItWatered);
     void growthPerDay(bool sunnyDay);
@@ -156,6 +161,11 @@ struct Envelope
     Envelope();
     ~Envelope();
 
+    void memberFunc()
+    {
+        std::cout << "Envelope: The current sustain level is: " << this->susLevel << std::endl;
+    }
+
     void addAttackToAmp();
     void controlCutoffOverTime(bool filterEnvSelected, bool isKeyPressed, double maxValueFilter);
     void controlPitchOverTime(bool pitchEnvSelected, bool isKeyPressed, double maxValuePitch);
@@ -166,7 +176,7 @@ Envelope::Envelope()
 {
     attTime = 0.3f;
     decTime = 0.5f;
-    susLevel = 0.0f;
+    susLevel = 2.0f;
     relTime = 1.5f; 
     midiVelLevel = 75;
 }
@@ -234,6 +244,11 @@ struct LFO
     
     LFO();
     ~LFO();
+
+    void memberFunc()
+    {
+        std::cout << "LFO: The current modulating waveform is: " << this->waveform << std::endl;
+    }
 
     void modAmpOfSample();
     void modPitchOfSample(bool lfoON, int pitchRange, bool pitchToggle);
@@ -314,6 +329,11 @@ struct Daw
     Daw();
     ~Daw();
 
+    void memberFunc()
+    {
+        std::cout << "The attack of this specific LFO is " << this->lfoNum.attack << " secs" << std::endl;
+    }
+
     void applyLFO(bool lfoOn, int modDest);
     void applyEnvtoPitch(bool filterEnvSelected, bool isKeyPressed);
 };
@@ -362,6 +382,11 @@ struct WindowSill
 
     WindowSill();
     ~WindowSill();
+    
+    void memberFunc()
+    {
+        std::cout << "The current number of roots in plant 3 is " << this->plant3.currentNumRoots << std::endl;
+    }
 
     void letLightIn(bool windowBlindsOpen);
     void evaporateWater(float insideTemp, float evapTemp);
@@ -431,7 +456,9 @@ int main()
 
     std::cout << leavesAdded << " leaves have been added " << std::endl;
     std::cout << "The plant now has " << leavesAdded + swissCheese.numLeaves << " leaves" << std::endl;
-    std::cout << "Amount of water in the roots is " << swissCheese.waterInRoots << " litres" << std::endl;
+    std::cout << "Swiss Cheese: Amount of water in the roots is " << swissCheese.waterInRoots << " litres" << std::endl;
+
+    swissCheese.memberFunc();
 
     Envelope firstEnvelope;
     firstEnvelope.addAttackToAmp();
@@ -441,21 +468,35 @@ int main()
 
     std::cout << "Does the audio reach full amplitude immdetiately? " << (firstEnvelope.attTime < 0.1f ? "Yes" : "No") << std::endl;
 
+    std::cout << "First envelope: The current sustain level is: " << firstEnvelope.susLevel << std::endl;
+
+    firstEnvelope.memberFunc();
+
     LFO myLFO;
     myLFO.modAmpOfSample();
     auto modulationRate = myLFO.createSidebands(16.0f);
 
     std::cout << "The current modulating rate is: " << modulationRate << " Hz" << std::endl;
     
-    std::cout << "The current modulating waveform is: " << myLFO.waveform << std::endl;
+    std::cout << "myLFO: The current modulating waveform is: " << myLFO.waveform << std::endl;
+
+    myLFO.memberFunc();
 
     Daw daw;
     daw.applyLFO(true, 2);
     daw.applyEnvtoPitch(false, true);
 
+    std::cout << "The attack of the LFO is " << daw.lfoNum.attack << " secs" << std::endl;
+    
+    daw.memberFunc();
+
     WindowSill windowsill;
     windowsill.letLightIn(true);
     windowsill.evaporateWater(26.0f, 25.0f);
+
+    std::cout << "The current number of roots is " << windowsill.plant3.currentNumRoots << std::endl;
+
+    windowsill.memberFunc();
 
     std::cout << "good to go!" << std::endl;
 }
